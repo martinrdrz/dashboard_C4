@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { useAuthStore, useForm } from '../hooks';
+//import { useAuthStore, useForm } from '../hooks';
+import { useAuth, useForm } from '../hooks';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -14,7 +15,7 @@ import Swal from 'sweetalert2';
 
 function Copyright(props) {
     return (
-        <Typography variant='body2' color='text.secondary' align='center' {...props}>
+        <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
             {new Date().getFullYear()}
             {'.'}
@@ -34,7 +35,8 @@ const formValidations = {
 
 export const LoginPage = () => {
     const { enqueueSnackbar } = useSnackbar();
-    const { startLogin, errorMessage } = useAuthStore();
+    //const { startLogin, errorMessage } = useAuthStore();
+    const { startLogin, errorMessage } = useAuth();
     const [formSubmitted, setFormSubmitted] = useState(false);
     const { loginEmail, loginPassword, onInputChange, isFormValid, loginEmailValid, loginPasswordValid } = useForm(
         formData,
@@ -64,7 +66,7 @@ export const LoginPage = () => {
     }, [errorMessage]);
 
     return (
-        <Container component='main' maxWidth='xs'>
+        <Container component="main" maxWidth="xs">
             <Box
                 sx={{
                     marginTop: 8,
@@ -76,48 +78,48 @@ export const LoginPage = () => {
                 <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                     <LockOutlinedIcon />
                 </Avatar>
-                <Typography component='h1' variant='h5'>
+                <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField
-                        margin='normal'
+                        margin="normal"
                         required
                         fullWidth
-                        id='loginEmail'
-                        label='Email Address'
-                        name='loginEmail'
+                        id="loginEmail"
+                        label="Email Address"
+                        name="loginEmail"
                         value={loginEmail}
                         onChange={onInputChange}
                         error={!!loginEmailValid && formSubmitted}
                         helperText={loginEmailValid}
-                        autoComplete='email'
+                        autoComplete="email"
                         autoFocus
-                        type='text'
-                        placeholder='Email Address'
+                        type="text"
+                        placeholder="Email Address"
                     />
                     <TextField
-                        margin='normal'
+                        margin="normal"
                         required
                         fullWidth
-                        name='loginPassword'
+                        name="loginPassword"
                         value={loginPassword}
                         onChange={onInputChange}
                         error={!!loginPasswordValid && formSubmitted}
                         helperText={loginPasswordValid}
-                        label='Password'
-                        type='password'
-                        id='loginPassword'
-                        autoComplete='current-password'
+                        label="Password"
+                        type="password"
+                        id="loginPassword"
+                        autoComplete="current-password"
                     />
-                    <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+                    <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                         Sign In
                     </Button>
                     <Grid container>
                         <Grid item xs>
                             <Button
                                 onClick={() => handleMensaje('Conacte al administrador')}
-                                variant='text'
+                                variant="text"
                                 sx={{ textTransform: 'none', padding: 0, color: 'primary.main' }}
                             >
                                 Olvidó su contraseña?
@@ -126,7 +128,7 @@ export const LoginPage = () => {
                         <Grid item>
                             <Button
                                 onClick={() => handleMensaje('Contacte al administrador')}
-                                variant='text'
+                                variant="text"
                                 sx={{ textTransform: 'none', padding: 0, color: 'primary.main' }}
                             >
                                 No tiene una cuenta?

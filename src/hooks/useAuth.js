@@ -1,10 +1,10 @@
-import { useAuthStore } from './store';
-import authApi from '../api/authApi';
+import { useAuthStore } from '../store';
+import { authApi } from '../api/authApi';
 
 export const useAuth = () => {
     const status = useAuthStore((state) => state.status);
     const errorMessage = useAuthStore((state) => state.errorMessage);
-    const email = useAuthStore((state) => state.email);
+    //const email = useAuthStore((state) => state.email);
     const checking = useAuthStore((state) => state.checking);
     const onLogin = useAuthStore((state) => state.onLogin);
     const onLogout = useAuthStore((state) => state.onLogout);
