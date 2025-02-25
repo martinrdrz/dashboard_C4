@@ -1,5 +1,5 @@
-import { useAuth } from '../hooks';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth, useForm } from '../hooks';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -10,7 +10,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useSnackbar } from 'notistack';
 import Swal from 'sweetalert2';
-import { useForm } from 'react-hook-form';
 
 function Copyright(props) {
     return (
@@ -27,22 +26,30 @@ const formData = {
     loginPassword: '123456',
 };
 
+const formValidations = {
+    loginEmail: [(value) => value.includes('@'), 'El correo debe de tener una @.'],
+    loginPassword: [(value) => value.length >= 6, 'El password debe detener mas de 6 letras.'],
+};
+
 export const LoginPage = () => {
     const { enqueueSnackbar } = useSnackbar();
     const { startLogin, errorMessage } = useAuth();
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isValid },
-    } = useForm({
-        defaultValues: formData,
-    });
+    const [formSubmitted, setFormSubmitted] = useState(false);
+    const { loginEmail, loginPassword, onInputChange, isFormValid, loginEmailValid, loginPasswordValid } = useForm(
+        formData,
+        formValidations
+    );
 
-    const onSubmit = (data) => {
-        //event.preventDefault();
-        //setFormSubmitted(true);
-        if (!isValid) return;
-        startLogin({ email: data.loginEmail, password: data.loginPassword });
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setFormSubmitted(true);
+        if (!isFormValid) return;
+        startLogin({ email: loginEmail, password: loginPassword });
+        // const data = new FormData(event.currentTarget);
+        // console.log({
+        //     email: data.get('LoginEmail'),
+        //     password: data.get('loginPassword'),
+        // });
     };
 
     const handleMensaje = (mensaje) => {
@@ -71,45 +78,36 @@ export const LoginPage = () => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField
                         margin="normal"
                         required
                         fullWidth
                         id="loginEmail"
                         label="Email Address"
+                        name="loginEmail"
+                        value={loginEmail}
+                        onChange={onInputChange}
+                        error={!!loginEmailValid && formSubmitted}
+                        helperText={loginEmailValid}
                         autoComplete="email"
                         autoFocus
                         type="text"
                         placeholder="Email Address"
-                        error={!!errors.loginEmail}
-                        helperText={errors.loginEmail?.message}
-                        {...register('loginEmail', {
-                            required: 'El email es obligatorio',
-                            pattern: {
-                                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                message: 'El formato del email no es válido',
-                            },
-                        })}
                     />
                     <TextField
                         margin="normal"
                         required
                         fullWidth
-                        id="loginPassword"
+                        name="loginPassword"
+                        value={loginPassword}
+                        onChange={onInputChange}
+                        error={!!loginPasswordValid && formSubmitted}
+                        helperText={loginPasswordValid}
                         label="Password"
-                        autoComplete="current-password"
                         type="password"
-                        placeholder="Contraseña"
-                        error={!!errors.loginPassword}
-                        helperText={errors.loginPassword?.message}
-                        {...register('loginPassword', {
-                            required: 'La contraseña es obligatoria',
-                            minLength: {
-                                value: 6,
-                                message: 'Debe tener al menos 6 caracteres',
-                            },
-                        })}
+                        id="loginPassword"
+                        autoComplete="current-password"
                     />
                     <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                         Sign In
