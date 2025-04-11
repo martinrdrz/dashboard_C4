@@ -7,6 +7,8 @@ import { DetalleCardRed } from './DetalleCardRed';
 export const ResponsiveGridLayout = () => {
     return (
         <Container
+            /*Este contenedor es utilizado para mantener todo en formato de una columna, es 
+            decir, grids siguientes quedan una debajo del otro */
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
